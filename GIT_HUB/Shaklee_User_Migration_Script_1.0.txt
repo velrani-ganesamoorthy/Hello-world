@@ -1,0 +1,91 @@
+#-----------------------------------------mbjoin
+
+INSERT INTO shaklee_users_Test.mbjoin
+(id,address1,address2,area1,area2,birthday,boss_id,complete,email,
+have_mate,intro_name,intro_no,mate,mate_boss_id,mb_name,post_no1,
+post_no2,service_no,sex,steps,tel1,tel3,area1_name,area2_name,
+post_no1_name,post_no2_name)
+SELECT ecs_mbjoin.id,ecs_mbjoin.address1,ecs_mbjoin.address2,ecs_mbjoin.area1,ecs_mbjoin.area2,
+ecs_mbjoin.birthday,ecs_mbjoin.boss_id,ecs_mbjoin.complete,ecs_mbjoin.email,ecs_mbjoin.have_mate,
+ecs_mbjoin.intro_name,ecs_mbjoin.intro_no,ecs_mbjoin.mate,ecs_mbjoin.mate_boss_id,ecs_mbjoin.mb_name,
+ecs_mbjoin.post_no1,ecs_mbjoin.post_no2,ecs_mbjoin.service_no,ecs_mbjoin.sex,ecs_mbjoin.steps,
+ecs_mbjoin.tel1,ecs_mbjoin.tel3, A.region_name area1_name,B.region_name area2_name,
+C.region_name post_no1_name,D.region_name post_no2_name
+FROM stageme_dba.ecs_mbjoin  join stageme_dba.ecs_region A on  ecs_mbjoin.area1=A.region_id
+                             join stageme_dba.ecs_region B on  ecs_mbjoin.area2=B.region_id
+                             Join stageme_dba.ecs_region C on  ecs_mbjoin.post_no1=C.region_id
+                             Join stageme_dba.ecs_region D on  ecs_mbjoin.post_no2=D.region_id;
+
+#-----------------------------------------------user_activities
+
+Insert into user_activities(id,activity_id,add_time,address,birthday,mobile,re_desc,re_time,re_user,real_name,sex,status,user_id)
+
+Select ecs_huodong_logs.logs_id,ecs_huodong_logs.activity_id,ecs_huodong_logs.add_time,ecs_huodong_logs.address,
+
+ecs_huodong_logs.birthday,ecs_huodong_logs.mobile,ecs_huodong_logs.re_desc,
+
+ecs_huodong_logs.re_time,ecs_huodong_logs.re_user,ecs_huodong_logs.real_name,
+
+ecs_huodong_logs.sex,ecs_huodong_logs.status,ecs_huodong_logs.user_sn
+
+from stageme_dba.ecs_huodong_logs;
+
+ 
+
+#------------------------------------------------------user_message
+
+INSERT INTO shaklee_users_Test.user_message
+(id,is_deleted,is_read,message_id,user_id)
+SELECT ecs_send_list.id,ecs_send_list.is_del,ecs_send_list.is_read,
+ecs_send_list.message_id,ecs_send_list.user_sn    
+FROM  stageme_dba.ecs_send_list;
+
+#------------------------------------------------------message
+
+INSERT INTO shaklee_users_Test.message
+(id,admin_id,admin_name,created_time,msg_content,msg_title)
+Select ecs_user_message.id,ecs_user_message.admin_id,ecs_user_message.admin_name,
+ecs_user_message.add_time,ecs_user_message.Content,ecs_user_message.title
+from stageme_dba.ecs_user_message;
+
+#----------------------------------------------------user_address 
+
+ 
+
+INSERT INTO shaklee_users_Test.user_address(
+
+address_id,user_id,user_name,email,country,province,
+
+city,district,  address,zipcode,tel,mobile,sign_building,best_time,address_name,cityname,districtname,provincename)
+
+select A.address_id,A.user_id,A.consignee UserName , A.email,A.country,A.province,A.city,A.district,
+
+A.address,A.zipcode,A.tel,A.mobile,sign_building,best_time,address_name ,
+
+city.region_name City,dis.region_name dis,Prov.region_name Prov
+
+from stageme_dba.ecs_user_address A join stageme_dba.ecs_region Prov on A.Province=Prov.region_id
+
+                                             join stageme_dba.ecs_region city on A.City=city.region_id                                             
+
+                                             left join stageme_dba.ecs_region dis on A.district=dis.region_id ;
+
+ 
+
+#--------------------------------------------------------user_rank
+
+INSERT INTO shaklee_users.user_rank
+
+(rank_id,user_rtype,true_grade_class,rank_name,min_points,max_points,
+
+discount,show_price,special_rank)
+
+select rank_id,user_rtype,true_grade_class,rank_name,min_points,
+
+max_points,discount,show_price,special_rank
+
+from cn_shaklee_client.ecs_user_rank
+
+ 
+
+Note :- Based on Source and Destination(Target) change the schema in the above query

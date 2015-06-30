@@ -1,0 +1,103 @@
+
+
+--------------From source table(ecs_region) into decomposed tables (target)
+
+1) truncate the table e.g) truncate table shaklee_master_data.country; if old record is not required
+
+2)Query for data load
+
+##----Country
+
+INSERT INTO shaklee_master_data.country
+
+(id,name)
+
+SELECT distinct
+
+country.region_ID AS country_ID,
+
+country.region_name AS country
+
+FROM cn_shaklee_client.ecs_region AS country
+
+JOIN cn_shaklee_client.ecs_region AS state ON state.parent_id = country.region_id
+
+JOIN cn_shaklee_client.ecs_region AS city ON city.parent_id = state.region_id
+
+JOIN cn_shaklee_client.ecs_region AS district ON district.parent_id = city.region_id;
+
+##---State
+
+INSERT INTO shaklee_master_data.state
+
+(id,name,country_id)
+
+SELECT distinct
+
+state.region_ID as state_ID,
+
+state.region_name as state ,
+
+country.region_ID AS country_ID
+
+FROM cn_shaklee_client.ecs_region AS country
+
+JOIN cn_shaklee_client.ecs_region AS state ON state.parent_id = country.region_id
+
+JOIN cn_shaklee_client.ecs_region AS city ON city.parent_id = state.region_id
+
+JOIN cn_shaklee_client.ecs_region AS district ON district.parent_id = city.region_id;
+
+##----City
+
+INSERT INTO `shaklee_master_data`.`city`
+
+(id,name,state_id,country_id)
+
+SELECT distinct
+
+city.region_ID as City_ID,
+
+city.region_name as City,
+
+state.region_ID as state_ID,
+
+country.region_ID AS country_ID
+
+FROM cn_shaklee_client.ecs_region AS country
+
+JOIN cn_shaklee_client.ecs_region AS state ON state.parent_id = country.region_id
+
+JOIN cn_shaklee_client.ecs_region AS city ON city.parent_id = state.region_id
+
+JOIN cn_shaklee_client.ecs_region AS district ON district.parent_id = city.region_id;
+
+##--------District
+
+INSERT INTO shaklee_master_data.district
+
+(id,name,city_id,state_id,country_id)
+
+SELECT distinct
+
+district.region_ID as districtID,
+
+district.region_name as district,
+
+city.region_ID as City_ID,
+
+state.region_ID as state_ID,
+
+country.region_ID AS country_ID
+
+FROM cn_shaklee_client.ecs_region AS country
+
+JOIN cn_shaklee_client.ecs_region AS state ON state.parent_id = country.region_id
+
+JOIN cn_shaklee_client.ecs_region AS city ON city.parent_id = state.region_id
+
+JOIN cn_shaklee_client.ecs_region AS district ON district.parent_id = city.region_id;
+
+ 
+
+Note :- Based on Source and Destination change the schema in the query

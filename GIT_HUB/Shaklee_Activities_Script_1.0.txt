@@ -1,0 +1,138 @@
+ ----------------------------------------Shaklee Activities
+
+
+#-----------------------------------------articles_category_grp
+
+* New table
+
+INSERT INTO shaklee_activities_Test.articles_category_grp
+
+(`id`,`category_id`,`name`)
+
+Select `id`,`category_id`,`name` from shaklee_activities.articles_category_grp;
+
+#-------------------------------------------articles_category
+
+INSERT INTO shaklee_activities.articles_category
+
+(id,name,description,keywords,parent_id,type,sort_order)
+
+Select cat_id,cat_name,cat_desc,keywords,parent_id,cat_type,sort_order
+
+from stageme_dba.ecs_article_cat;
+
+#-------------------------------------------- article
+
+INSERT INTO shaklee_activities.article
+
+(id,cat_id,title,content,article_type,is_open,
+
+add_time,file_url,open_type,link,description,sort_order,
+
+click_count)
+
+Select article_id,cat_id,title,content,article_type,
+
+is_open,add_time,file_url,open_type,link,description,sort_order,click_count
+
+from stageme_dba.ecs_article;
+
+#------------------------------------------activity_logs
+
+INSERT INTO shaklee_activities.activity_logs
+
+(logs_id,activity_id,sex,address,mobile,user_sn,add_time,real_name,
+
+birthday,status,re_time,re_user,re_desc)
+
+Select  logs_id,activity_id,sex,address,mobile,user_sn,add_time,real_name,
+
+birthday,status,re_time,re_user,re_desc
+
+from stageme_dba.ecs_huodong_logs;
+
+ #-------------------------------------------activity_cat
+
+INSERT INTO shaklee_activities.activity_cat
+
+(cat_id,cat_name,cat_type,keywords,cat_desc,sort_order,
+
+show_in_nav,parent_id)
+
+Select cat_id,cat_name,cat_type,keywords,cat_desc,sort_order,
+
+show_in_nav,parent_id from stageme_dba.ecs_huodong_cat;
+
+ 
+
+#-------------------------------------------activity
+
+INSERT INTO shaklee_activities.activity
+
+(article_id,cat_id,title,content,author,author_email,keywords,article_type,
+
+is_open,add_time,file_url,open_type,link,description,start_date,end_date,
+
+integral,address,bm_num,is_index,sort_order,province,city_id,click_count,
+
+deduct_way,yt_goods_sn,reg_num)
+
+ 
+
+SELECT distinct ecs_huodong.article_id,ecs_huodong.cat_id,ecs_huodong.title,ecs_huodong.content,ecs_huodong.author,ecs_huodong.author_email,
+
+ecs_huodong.keywords,ecs_huodong.article_type,ecs_huodong.is_open,ecs_huodong.add_time,ecs_huodong.file_url,ecs_huodong.open_type,
+
+ecs_huodong.link,ecs_huodong.description,ecs_huodong.start_date,ecs_huodong.end_date,ecs_huodong.integral,ecs_huodong.address,
+
+ecs_huodong.bm_num,ecs_huodong.is_index,ecs_huodong.sort_order,ecs_huodong.province,ecs_region.region_id,ecs_huodong.click_count,
+
+ecs_huodong.deduct_way,ecs_huodong.yt_goods_sn,ecs_huodong.reg_num
+
+FROM stageme_dba.ecs_huodong  join ecs_region  on ecs_huodong.city_name=ecs_region.region_Name
+
+ 
+
+SELECT distinct ecs_huodong.article_id,ecs_huodong.cat_id,ecs_huodong.title,ecs_huodong.content,ecs_huodong.author,ecs_huodong.author_email,
+
+ecs_huodong.keywords,ecs_huodong.article_type,ecs_huodong.is_open,ecs_huodong.add_time,ecs_huodong.file_url,ecs_huodong.open_type,
+
+ecs_huodong.link,ecs_huodong.description,ecs_huodong.start_date,ecs_huodong.end_date,ecs_huodong.integral,ecs_huodong.address,
+
+ecs_huodong.bm_num,ecs_huodong.is_index,ecs_huodong.sort_order,ecs_huodong.province,ecs_region.region_id,ecs_huodong.click_count,
+
+ecs_huodong.deduct_way,ecs_huodong.yt_goods_sn,ecs_huodong.reg_num
+
+FROM stageme_dba.ecs_huodong  join ecs_region  on ecs_huodong.city_name=ecs_region.region_id
+
+ 
+
+SELECT distinct ecs_huodong.article_id,ecs_huodong.cat_id,ecs_huodong.title,ecs_huodong.content,ecs_huodong.author,ecs_huodong.author_email,
+
+ecs_huodong.keywords,ecs_huodong.article_type,ecs_huodong.is_open,ecs_huodong.add_time,ecs_huodong.file_url,ecs_huodong.open_type,
+
+ecs_huodong.link,ecs_huodong.description,ecs_huodong.start_date,ecs_huodong.end_date,ecs_huodong.integral,ecs_huodong.address,
+
+ecs_huodong.bm_num,ecs_huodong.is_index,ecs_huodong.sort_order,ecs_huodong.province,ecs_huodong.city_name,ecs_huodong.click_count,
+
+ecs_huodong.deduct_way,ecs_huodong.yt_goods_sn,ecs_huodong.reg_num
+
+FROM stageme_dba.ecs_huodong where convert( ecs_huodong.city_name , UNSIGNED)=0 and article_id not in (29,30)
+
+order by article_id;
+
+#-----------------------------------------------------------navigation
+
+Insert into shaklee_activities_Test.navigation
+
+(ctype,cid,name,ifshow,vieworder,opennew,url,type,user_rtype)
+
+Select ctype,cid,name,ifshow,vieworder,opennew,
+
+url,type,user_rtype from stageme_dba.ecs_nav;
+
+ 
+
+--------------------------Note :- Based on Source and Destination(Target) change the schema in the above query
+
+ 
